@@ -19,38 +19,15 @@ int close_window(int key, void *param)
 	return (0);
 }
 
-void	ft_print_window(t_fdf *fdf, int i, int j)
+void	ft_print_window(t_fdf *fdf)
 {
-	void	*mlx_ptr;
-	void	*win_ptr;
-
-	mlx_ptr = mlx_init();
-	win_ptr = mlx_new_window(mlx_ptr, 5120, 2880, "FDF");
+	fdf->mlx_ptr = mlx_init();
+	fdf->win_ptr = mlx_new_window(fdf->mlx_ptr, 5120, 2880, "FDF");
 	ft_rotate_z(fdf, -0.5);
 	ft_rotate_x(fdf, -0.5);
-	while (++j< fdf->y_max)
-	{
-		i = -1;
-		while (++i< fdf->x_max)
-		{
-			fdf->map[j][i].x += 850;
-			fdf->map[j][i].y += 100;
-		}
-	}
-	j = -1;
-	while (++j < fdf->y_max)
-	{
-		i = -1;
-		while (++i < fdf->x_max)
-		{
-			if (i + 1 < fdf->x_max)
-				ft_horizontal(fdf, mlx_ptr, win_ptr, j, i);
-			if (j + 1 < fdf->y_max)	
-				ft_vertical(fdf, mlx_ptr, win_ptr, j, i);
-		}
-	}
-	mlx_key_hook(win_ptr, close_window, (void *)0);
-	mlx_loop(mlx_ptr);
+	ft_set_print(fdf, -1, -1);
+	mlx_key_hook(fdf->win_ptr, close_window, (void *)0);
+	mlx_loop(fdf->mlx_ptr);
 }
 
 void	ft_add_content(t_fdf *fdf)
@@ -136,6 +113,8 @@ int		ft_check_str(t_fdf *fdf, int i, int k)
 
 void	ft_init_fdf(t_fdf *fdf)
 {
+	fdf->mlx_ptr = NULL;
+	fdf->win_ptr = NULL;
 	fdf->str = NULL;
 	fdf->tmp = NULL;
 	fdf->x_max = 0;
@@ -168,6 +147,6 @@ int     main(int ac, char **av)
 		perror(av[1]);
 	if (fdf.x_max < 2 && fdf.y_max < 2)
 		exit(ft_printf("map error\n"));
-	ft_print_window(&fdf, -1, -1);
+	ft_print_window(&fdf);
 	return (0);
 }

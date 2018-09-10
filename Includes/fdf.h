@@ -34,6 +34,8 @@ typedef struct		s_fstr
 
 typedef struct		s_fdf
 {
+	void			*mlx_ptr;
+	void			*win_ptr;
 	int				fd;
 	char			*str;
 	char			**tmp;
@@ -43,10 +45,11 @@ typedef struct		s_fdf
 	t_pixel			**map;
 }					t_fdf;
 
-void ft_horizontal(t_fdf *fdf, void *mlx_ptr, void *win_ptr, int j, int i);
-void ft_vertical(t_fdf *fdf, void *mlx_ptr, void *win_ptr, int j, int i);
+void ft_horizontal(t_fdf *fdf, int j, int i);
+void ft_vertical(t_fdf *fdf, int j, int i);
 void ft_rotate_x(t_fdf *fdf, double alp);
 void ft_rotate_y(t_fdf *fdf, double alp);
 void ft_rotate_z(t_fdf *fdf, double alp);
+void ft_set_print(t_fdf *fdf, int i, int j);
 
 #endif
