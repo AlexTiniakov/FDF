@@ -12,13 +12,6 @@
 
 #include <fdf.h>
 
-int close_window(int key, void *param)
-{
-	if (key == 53)
-		exit(0);
-	return (0);
-}
-
 void	ft_print_window(t_fdf *fdf)
 {
 	fdf->mlx_ptr = mlx_init();
@@ -26,7 +19,7 @@ void	ft_print_window(t_fdf *fdf)
 	ft_rotate_z(fdf, -0.5);
 	ft_rotate_x(fdf, -0.5);
 	ft_set_print(fdf, -1, -1);
-	mlx_key_hook(fdf->win_ptr, close_window, (void *)0);
+	mlx_key_hook(fdf->win_ptr, ft_wait, (void *)fdf);
 	mlx_loop(fdf->mlx_ptr);
 }
 
@@ -85,9 +78,11 @@ void	ft_add_to_map(t_fdf *fdf, int i)
 	fdf->map[fdf->y_max - 1] = (t_pixel *)malloc(sizeof(t_pixel) * fdf->x_max);
 	while (fdf->tmp[++i])
 	{
-		fdf->map[fdf->y_max - 1][i].x = i * 1000 / fdf->x_max;
-		fdf->map[fdf->y_max - 1][i].y = (fdf->y_max - 1) * 1000 / fdf->x_max;
-		fdf->map[fdf->y_max - 1][i].z = ft_atoi(fdf->tmp[i]) * 100 / fdf->x_max;
+		if (ft_atoi_long(fdf->tmp[i]) > 2147483647 || ft_atoi(fdf->tmp[i]) < -2147483648)
+			exit(ft_printf("map error\n"));
+		fdf->map[fdf->y_max - 1][i].x = i / (double)fdf->x_max * 1000;
+		fdf->map[fdf->y_max - 1][i].y = ((double)fdf->y_max - 1) / (double)fdf->x_max * 1000;
+		fdf->map[fdf->y_max - 1][i].z = (double)ft_atoi(fdf->tmp[i]) / (double)fdf->x_max * 300;
 		fdf->map[fdf->y_max - 1][i].colour = ft_strstr(fdf->tmp[i], ",0x") ? _MAX(ft_atoi_base((ft_strstr(fdf->tmp[i], ",0x") + 3), _HEXL), ft_atoi_base((ft_strstr(fdf->tmp[i], ",0x") + 3), _HEXU)) : 0xFFFFFF;
 	}
 }
@@ -104,7 +99,7 @@ int		ft_check_str(t_fdf *fdf, int i, int k)
 		k++;
 	}
 	fdf->x_max = fdf->x_max ? fdf->x_max : k;
-	if (fdf->x_max != k)
+	if (fdf->x_max != k || fdf->x_max >= 99999)
 		return (0);
 	fdf->y_max++;
 	ft_add_to_map(fdf, -1);
@@ -119,9 +114,12 @@ void	ft_init_fdf(t_fdf *fdf)
 	fdf->tmp = NULL;
 	fdf->x_max = 0;
 	fdf->y_max = 0;
+	fdf->x0 = 850;
+	fdf->y0 = 100;
 	fdf->content = NULL;
 	fdf->map = NULL;
-	fdf->map = (t_pixel **)malloc(sizeof(t_pixel *) * 10000);
+	fdf->map = (t_pixel **)malloc(sizeof(t_pixel *) * 100000);
+	fdf->zoom = 0;
 }
 
 void	ft_fdf(t_fdf *fdf)

@@ -20,9 +20,9 @@
 
 typedef struct	s_pixel
 {
-	int				x;
-	int				y;
-	int				z;
+	double				x;
+	double				y;
+	double				z;
 	int		        colour;
 }					t_pixel;
 
@@ -37,10 +37,14 @@ typedef struct		s_fdf
 	void			*mlx_ptr;
 	void			*win_ptr;
 	int				fd;
+	double			delta;
 	char			*str;
 	char			**tmp;
 	int				x_max;
 	int				y_max;
+	int				x0;
+	int				y0;
+	int				zoom;
 	t_fstr			*content;
 	t_pixel			**map;
 }					t_fdf;
@@ -51,5 +55,10 @@ void ft_rotate_x(t_fdf *fdf, double alp);
 void ft_rotate_y(t_fdf *fdf, double alp);
 void ft_rotate_z(t_fdf *fdf, double alp);
 void ft_set_print(t_fdf *fdf, int i, int j);
+int ft_wait(int key, void *param);
+void ft_rotate_all(t_fdf *fdf, int key);
+void ft_move(t_fdf *fdf, int key);
+void ft_zoom(t_fdf *fdf, int key);
+void ft_colour(t_fdf *fdf, int key);
 
 #endif

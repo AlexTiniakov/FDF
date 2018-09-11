@@ -21,6 +21,7 @@ MLX = -L /usr/local/lib/ -lmlx -framework OpenGL -framework AppKit
 SRC = src/fdf.c\
 		src/ft_brezenham.c\
 		src/ft_rotate.c\
+		src/ft_bonuses.c\
 
 
 OBJ = $(SRC:.c=.o)

@@ -14,8 +14,8 @@
 
 void ft_rotate_x(t_fdf *fdf, double alp)
 {
-    int y;
-    int z;
+    double y;
+    double z;
     int i;
     int j;
 
@@ -35,8 +35,8 @@ void ft_rotate_x(t_fdf *fdf, double alp)
 
 void ft_rotate_y(t_fdf *fdf, double alp)
 {
-    int x;
-    int z;
+    double x;
+    double z;
     int i;
     int j;
 
@@ -56,8 +56,8 @@ void ft_rotate_y(t_fdf *fdf, double alp)
 
 void ft_rotate_z(t_fdf *fdf, double alp)
 {
-    int x;
-    int y;
+    double x;
+    double y;
     int i;
     int j;
 
@@ -71,31 +71,6 @@ void ft_rotate_z(t_fdf *fdf, double alp)
 			y = 0 - fdf->map[j][i].x * sin(alp)  + fdf->map[j][i].y * cos(alp);
 			fdf->map[j][i].x = x;
 			fdf->map[j][i].y = y;
-		}
-	}
-}
-
-void ft_set_print(t_fdf *fdf, int i, int j)
-{
-    while (++j< fdf->y_max)
-	{
-		i = -1;
-		while (++i< fdf->x_max)
-		{
-			fdf->map[j][i].x += 850;
-			fdf->map[j][i].y += 100;
-		}
-	}
-	j = -1;
-	while (++j < fdf->y_max)
-	{
-		i = -1;
-		while (++i < fdf->x_max)
-		{
-			if (i + 1 < fdf->x_max)
-				ft_horizontal(fdf, j, i);
-			if (j + 1 < fdf->y_max)	
-				ft_vertical(fdf, j, i);
 		}
 	}
 }
