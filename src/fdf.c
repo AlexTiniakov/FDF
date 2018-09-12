@@ -27,7 +27,7 @@ void	ft_add_content(t_fdf *fdf)
 {
 	t_fstr *tmp;
 	t_fstr *tab;
-	
+
 	tmp = fdf->content;
 	while (fdf->content && fdf->content->next)
 		fdf->content = fdf->content->next;
@@ -43,83 +43,19 @@ void	ft_add_content(t_fdf *fdf)
 		fdf->content = tab;
 }
 
-int		ft_check_1(char *str, int j)
-{
-	while (str[++j])
-			if (!(_MS || ft_isdigit(str[j])))
-				return (0);
-	return (1);
-}
-
-int		ft_check_colour(char *str)
-{
-	int	j;
-	char *s;
-
-	j = 2;
-	if (!ft_strstr(str, ",0x") && !ft_check_1(str, -1))
-		return (0);
-	if ((s = ft_strstr(str, ",0x")))
-	{
-		while(s[++j])
-			if ((!ft_strchr(_HEXU, s[j]) && !ft_strchr(_HEXL, s[j])) || j > 8)
-				return (0);
-		if (!(j = s - str))
-			return (0);
-		while (--j >= 0)
-			if (!(_MS || ft_isdigit(str[j])))
-				return (0);
-	}
-	return (1);
-}
-
 void	ft_add_to_map(t_fdf *fdf, int i)
 {
 	fdf->map[fdf->y_max - 1] = (t_pixel *)malloc(sizeof(t_pixel) * fdf->x_max);
 	while (fdf->tmp[++i])
 	{
-		if (ft_atoi_long(fdf->tmp[i]) > 2147483647 || ft_atoi(fdf->tmp[i]) < -2147483648)
+		if (_A_L1 || _A_L2)
 			exit(ft_printf("map error\n"));
 		fdf->map[fdf->y_max - 1][i].x = i / (double)fdf->x_max * 1000;
-		fdf->map[fdf->y_max - 1][i].y = ((double)fdf->y_max - 1) / (double)fdf->x_max * 1000;
-		fdf->map[fdf->y_max - 1][i].z = (double)ft_atoi(fdf->tmp[i]) / (double)fdf->x_max * 300;
-		fdf->map[fdf->y_max - 1][i].colour = ft_strstr(fdf->tmp[i], ",0x") ? _MAX(ft_atoi_base((ft_strstr(fdf->tmp[i], ",0x") + 3), _HEXL), ft_atoi_base((ft_strstr(fdf->tmp[i], ",0x") + 3), _HEXU)) : 0xFFFFFF;
+		fdf->map[fdf->y_max - 1][i].y = _Y;
+		fdf->map[fdf->y_max - 1][i].z = ft_atoi(fdf->tmp[i]);
+		fdf->map[fdf->y_max - 1][i].z = _Z ? 100000 : _Z1;
+		_COL = _S1 ? _MAX(_AB1, _AB2) : 0xFFFFFF;
 	}
-}
-
-int		ft_check_str(t_fdf *fdf, int i, int k)
-{
-	if (!fdf->str || !(fdf->tmp = ft_strsplit(fdf->str, ' ')))
-		return (0);
-	ft_add_content(fdf);
-	while (fdf->tmp && fdf->tmp[++i])
-	{
-		if (!ft_check_colour(fdf->tmp[i]))
-			return (0);
-		k++;
-	}
-	fdf->x_max = fdf->x_max ? fdf->x_max : k;
-	if (fdf->x_max != k || fdf->x_max >= 99999)
-		return (0);
-	fdf->y_max++;
-	ft_add_to_map(fdf, -1);
-	return (1);
-}
-
-void	ft_init_fdf(t_fdf *fdf)
-{
-	fdf->mlx_ptr = NULL;
-	fdf->win_ptr = NULL;
-	fdf->str = NULL;
-	fdf->tmp = NULL;
-	fdf->x_max = 0;
-	fdf->y_max = 0;
-	fdf->x0 = 850;
-	fdf->y0 = 100;
-	fdf->content = NULL;
-	fdf->map = NULL;
-	fdf->map = (t_pixel **)malloc(sizeof(t_pixel *) * 100000);
-	fdf->zoom = 0;
 }
 
 void	ft_fdf(t_fdf *fdf)
@@ -132,17 +68,23 @@ void	ft_fdf(t_fdf *fdf)
 	}
 }
 
-int     main(int ac, char **av)
+int		main(int ac, char **av)
 {
-	t_fdf	fdf;
+	t_fdf fdf;
 
 	ft_init_fdf(&fdf);
 	if (ac > 1 && (fdf.fd = open(av[1], O_RDWR)) != -1)
 		ft_fdf(&fdf);
 	else if (ac < 2)
+	{
 		ft_printf("usage: ./fdf map_file\n");
-	else
+		exit(0);
+	}
+	else if (fdf.fd == -1)
+	{
 		perror(av[1]);
+		exit(0);
+	}
 	if (fdf.x_max < 2 && fdf.y_max < 2)
 		exit(ft_printf("map error\n"));
 	ft_print_window(&fdf);

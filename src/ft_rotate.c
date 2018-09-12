@@ -12,12 +12,12 @@
 
 #include <fdf.h>
 
-void ft_rotate_x(t_fdf *fdf, double alp)
+void	ft_rotate_x(t_fdf *fdf, double alp)
 {
-    double y;
-    double z;
-    int i;
-    int j;
+	double	y;
+	double	z;
+	int		i;
+	int		j;
 
 	j = -1;
 	while (++j < fdf->y_max)
@@ -25,20 +25,20 @@ void ft_rotate_x(t_fdf *fdf, double alp)
 		i = -1;
 		while (++i < fdf->x_max)
 		{
-			y = fdf->map[j][i].y * cos(alp)  + fdf->map[j][i].z * sin(alp);
-			z = 0 - fdf->map[j][i].y * sin(alp)  + fdf->map[j][i].z * cos(alp);
+			y = fdf->map[j][i].y * cos(alp) + fdf->map[j][i].z * sin(alp);
+			z = 0 - fdf->map[j][i].y * sin(alp) + fdf->map[j][i].z * cos(alp);
 			fdf->map[j][i].y = y;
 			fdf->map[j][i].z = z;
 		}
 	}
 }
 
-void ft_rotate_y(t_fdf *fdf, double alp)
+void	ft_rotate_y(t_fdf *fdf, double alp)
 {
-    double x;
-    double z;
-    int i;
-    int j;
+	double	x;
+	double	z;
+	int		i;
+	int		j;
 
 	j = -1;
 	while (++j < fdf->y_max)
@@ -46,20 +46,20 @@ void ft_rotate_y(t_fdf *fdf, double alp)
 		i = -1;
 		while (++i < fdf->x_max)
 		{
-			x = fdf->map[j][i].x * cos(alp)  - fdf->map[j][i].z * sin(alp);
-			z = fdf->map[j][i].x * sin(alp)  + fdf->map[j][i].z * cos(alp);
+			x = fdf->map[j][i].x * cos(alp) - fdf->map[j][i].z * sin(alp);
+			z = fdf->map[j][i].x * sin(alp) + fdf->map[j][i].z * cos(alp);
 			fdf->map[j][i].x = x;
 			fdf->map[j][i].z = z;
 		}
 	}
 }
 
-void ft_rotate_z(t_fdf *fdf, double alp)
+void	ft_rotate_z(t_fdf *fdf, double alp)
 {
-    double x;
-    double y;
-    int i;
-    int j;
+	double	x;
+	double	y;
+	int		i;
+	int		j;
 
 	j = -1;
 	while (++j < fdf->y_max)
@@ -67,8 +67,8 @@ void ft_rotate_z(t_fdf *fdf, double alp)
 		i = -1;
 		while (++i < fdf->x_max)
 		{
-			x = fdf->map[j][i].x * cos(alp)  + fdf->map[j][i].y * sin(alp);
-			y = 0 - fdf->map[j][i].x * sin(alp)  + fdf->map[j][i].y * cos(alp);
+			x = fdf->map[j][i].x * cos(alp) + fdf->map[j][i].y * sin(alp);
+			y = 0 - fdf->map[j][i].x * sin(alp) + fdf->map[j][i].y * cos(alp);
 			fdf->map[j][i].x = x;
 			fdf->map[j][i].y = y;
 		}
